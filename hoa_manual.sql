@@ -1,365 +1,261 @@
--- MySQL Workbench Forward Engineering
+CREATE DATABASE hoa;
+USE hoa;
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
-
--- -----------------------------------------------------
--- Table `mydb`.`regions`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`regions` (
+CREATE TABLE `regions` (
   `region` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`region`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`region`));
 
 
--- -----------------------------------------------------
--- Table `mydb`.`provinces`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`provinces` (
-  `province` VARCHAR(45) NOT NULL,
-  `region` VARCHAR(45) NOT NULL,
+CREATE TABLE `provinces` (
+  `province`     VARCHAR(45)     NOT NULL,
+  `region`       VARCHAR(45)     NOT NULL,
   PRIMARY KEY (`province`),
-  INDEX `region_idx` (`region` ASC),
+  INDEX `region_idx` (`region` ASC) VISIBLE,
   CONSTRAINT `region`
     FOREIGN KEY (`region`)
-    REFERENCES `mydb`.`regions` (`region`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `regions` (`region`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`zipcodes`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`zipcodes` (
-  `barangay` VARCHAR(45) NOT NULL,
-  `city` VARCHAR(45) NOT NULL,
-  `province` VARCHAR(45) NOT NULL,
-  `zipcode` INT NOT NULL,
+CREATE TABLE `zipcodes` (
+  `barangay`     VARCHAR(45)    NOT NULL,
+  `city`         VARCHAR(45)    NOT NULL,
+  `province`     VARCHAR(45)    NOT NULL,
+  `zipcode`      INT            NOT NULL,
   PRIMARY KEY (`zipcode`),
-  INDEX `province_idx` (`province` ASC),
+  INDEX `province_idx` (`province` ASC) VISIBLE,
   CONSTRAINT `province`
     FOREIGN KEY (`province`)
-    REFERENCES `mydb`.`provinces` (`province`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `provinces` (`province`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`hoa`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`hoa` (
-  `hoaname` VARCHAR(100) NOT NULL,
-  `office_streetno` VARCHAR(20) NOT NULL,
-  `office_street` VARCHAR(45) NOT NULL,
-  `office_zipcode` INT NOT NULL,
-  `office_mapx` VARCHAR(45) NOT NULL,
-  `office_mapy` VARCHAR(45) NOT NULL,
-  `year_est` INT(4) NOT NULL,
-  `website` VARCHAR(45) NULL,
-  `subd_name` VARCHAR(45) NOT NULL,
-  `monthly_dues` INT(2) NOT NULL,
+CREATE TABLE `hoa` (
+  `hoaname`         VARCHAR(100)    NOT NULL,
+  `office_streetno` VARCHAR(20)     NOT NULL,
+  `office_street`   VARCHAR(45)     NOT NULL,
+  `office_zipcode`  INT             NOT NULL,
+  `office_mapx`     VARCHAR(45)     NOT NULL,
+  `office_mapy`     VARCHAR(45)     NOT NULL,
+  `year_est`        INT(4)          NOT NULL,
+  `website`         VARCHAR(45)     NULL,
+  `subd_name`       VARCHAR(45)     NOT NULL,
+  `monthly_dues`    INT(2)          NOT NULL,
   PRIMARY KEY (`hoaname`),
-  INDEX `zipcode_idx` (`office_zipcode` ASC),
+  INDEX `zipcode_idx` (`office_zipcode` ASC) VISIBLE,
   CONSTRAINT `zipcode`
     FOREIGN KEY (`office_zipcode`)
-    REFERENCES `mydb`.`zipcodes` (`zipcode`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `zipcodes` (`zipcode`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`hoa_docs`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`hoa_docs` (
-  `submission_type` INT NOT NULL,
-  `doc_name` VARCHAR(200) NOT NULL,
-  PRIMARY KEY (`submission_type`))
-ENGINE = InnoDB;
+CREATE TABLE `hoa_docs` (
+  `submission_type` INT             NOT NULL,
+  `doc_name`        VARCHAR(200)    NOT NULL,
+  PRIMARY KEY (`submission_type`));
 
 
--- -----------------------------------------------------
--- Table `mydb`.`hoa_submissions`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`hoa_submissions` (
-  `hoa_hoaname` VARCHAR(100) NOT NULL,
-  `hoa_docs_submission_type` INT NOT NULL,
-  `submission_date` DATETIME NOT NULL,
+CREATE TABLE `hoa_submissions` (
+  `hoa_hoaname`                 VARCHAR(100)    NOT NULL,
+  `hoa_docs_submission_type`    INT             NOT NULL,
+  `submission_date`             DATETIME        NOT NULL,
   PRIMARY KEY (`hoa_hoaname`, `hoa_docs_submission_type`, `submission_date`),
-  INDEX `fk_hoa_submissions_hoa_document1_idx` (`hoa_docs_submission_type` ASC),
+  INDEX `fk_hoa_submissions_hoa_document1_idx` (`hoa_docs_submission_type` ASC) VISIBLE,
   CONSTRAINT `fk_hoa_submissions_hoa`
     FOREIGN KEY (`hoa_hoaname`)
-    REFERENCES `mydb`.`hoa` (`hoaname`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `hoa` (`hoaname`)
+    ,
   CONSTRAINT `fk_hoa_submissions_hoa_document1`
     FOREIGN KEY (`hoa_docs_submission_type`)
-    REFERENCES `mydb`.`hoa_docs` (`submission_type`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `hoa_docs` (`submission_type`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`individual`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`individual` (
-  `individualid` INT NOT NULL,
-  `lastname` VARCHAR(45) NOT NULL,
-  `firstname` VARCHAR(45) NOT NULL,
-  `mi` VARCHAR(2) NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `birthday` DATE NOT NULL,
-  `gender` ENUM('M', 'F') NOT NULL,
-  `facebook_url` VARCHAR(45) NULL,
-  `pic_filename` VARCHAR(45) NOT NULL,
-  `undertaking` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`individualid`))
-ENGINE = InnoDB;
+CREATE TABLE `individual` (
+  `individualid`    INT             NOT NULL,
+  `lastname`        VARCHAR(45)     NOT NULL,
+  `firstname`       VARCHAR(45)     NOT NULL,
+  `mi`              VARCHAR(2)      NULL,
+  `email`           VARCHAR(45)     NOT NULL,
+  `birthday`        DATE            NOT NULL,
+  `gender`          ENUM('M', 'F')  NOT NULL,
+  `facebook_url`    VARCHAR(45)     NULL,
+  `pic_filename`    VARCHAR(45)     NOT NULL,
+  `undertaking`     TINYINT(1)      NOT NULL,
+  PRIMARY KEY (`individualid`));
 
 
--- -----------------------------------------------------
--- Table `mydb`.`homeowner`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`homeowner` (
-  `homeownerid` INT NOT NULL,
-  `residency_start` DATE NULL,
-  `membership` TINYINT(1) NOT NULL,
-  `isresident` TINYINT(1) NOT NULL,
+CREATE TABLE `homeowner` (
+  `homeownerid`       INT           NOT NULL,
+  `residency_start`   DATE          NULL,
+  `membership`        TINYINT(1)    NOT NULL,
+  `isresident`        TINYINT(1)    NOT NULL,
   PRIMARY KEY (`homeownerid`),
   CONSTRAINT `fk_homeowner_individual1`
     FOREIGN KEY (`homeownerid`)
-    REFERENCES `mydb`.`individual` (`individualid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `individual` (`individualid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`homeowner_addinfo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`homeowner_addinfo` (
-  `homeownerid` INT NOT NULL,
-  `add2_streetno` VARCHAR(20) NULL,
-  `add2_street` VARCHAR(45) NULL,
-  `add2_zipcode` INT NOT NULL,
-  `add2_mapx` VARCHAR(45) NULL,
-  `add2_mapy` VARCHAR(45) NULL,
-  `email2` VARCHAR(45) NULL,
-  `mobile2` INT(11) ZEROFILL NULL,
+CREATE TABLE `homeowner_addinfo` (
+  `homeownerid`     INT                 NOT NULL,
+  `add2_streetno`   VARCHAR(20)         NULL,
+  `add2_street`     VARCHAR(45)         NULL,
+  `add2_zipcode`    INT                 NOT NULL,
+  `add2_mapx`       VARCHAR(45)         NULL,
+  `add2_mapy`       VARCHAR(45)         NULL,
+  `email2`          VARCHAR(45)         NULL,
+  `mobile2`         INT(11) ZEROFILL    NULL,
   PRIMARY KEY (`homeownerid`),
-  INDEX `zipcode_idx` (`add2_zipcode` ASC),
+  INDEX `zipcode_idx` (`add2_zipcode` ASC) VISIBLE,
   CONSTRAINT `fk_homeowner_addinfo_hoaowner1`
     FOREIGN KEY (`homeownerid`)
-    REFERENCES `mydb`.`homeowner` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `homeowner` (`homeownerid`)
+    ,
   CONSTRAINT `fk_zipcode_addinfo`
     FOREIGN KEY (`add2_zipcode`)
-    REFERENCES `mydb`.`zipcodes` (`zipcode`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `zipcodes` (`zipcode`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`mobile`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`mobile` (
-  `mobilenum` INT(11) ZEROFILL NOT NULL,
-  `individualid` INT NOT NULL,
+CREATE TABLE `mobile` (
+  `mobilenum`       INT(11) ZEROFILL    NOT NULL,
+  `individualid`    INT                 NOT NULL,
   PRIMARY KEY (`mobilenum`),
-  INDEX `fk_mobile_individual1_idx` (`individualid` ASC),
+  INDEX `fk_mobile_individual1_idx` (`individualid` ASC) VISIBLE,
   CONSTRAINT `fk_mobile_individual1`
     FOREIGN KEY (`individualid`)
-    REFERENCES `mydb`.`individual` (`individualid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `individual` (`individualid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`property`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`property` (
-  `propertycode` VARCHAR(6) NOT NULL,
-  `homeownerid` INT NOT NULL,
-  `hoaname` VARCHAR(100) NOT NULL,
-  `size` INT NOT NULL,
-  `turnover_date` DATE NOT NULL,
+CREATE TABLE `property` (
+  `propertycode`     VARCHAR(6)     NOT NULL,
+  `homeownerid`      INT            NOT NULL,
+  `hoaname`          VARCHAR(100)   NOT NULL,
+  `size`             INT            NOT NULL,
+  `turnover_date`    DATE           NOT NULL,
   PRIMARY KEY (`propertycode`),
-  INDEX `fk_property_homeowner1_idx` (`homeownerid` ASC),
-  INDEX `fk_property_hoa1_idx` (`hoaname` ASC),
+  INDEX `fk_property_homeowner1_idx` (`homeownerid` ASC) VISIBLE,
+  INDEX `fk_property_hoa1_idx` (`hoaname` ASC) VISIBLE,
   CONSTRAINT `fk_property_homeowner1`
     FOREIGN KEY (`homeownerid`)
-    REFERENCES `mydb`.`homeowner` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `homeowner` (`homeownerid`)
+    ,
   CONSTRAINT `fk_property_hoa1`
     FOREIGN KEY (`hoaname`)
-    REFERENCES `mydb`.`hoa` (`hoaname`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `hoa` (`hoaname`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`household`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`household` (
-  `householdid` INT NOT NULL,
-  `propertycode` VARCHAR(6) NOT NULL,
+CREATE TABLE `household` (
+  `householdid`     INT         NOT NULL,
+  `propertycode`    VARCHAR(6)  NOT NULL,
   PRIMARY KEY (`householdid`),
-  INDEX `fk_household_property1_idx` (`propertycode` ASC),
+  INDEX `fk_household_property1_idx` (`propertycode` ASC) VISIBLE,
   CONSTRAINT `fk_household_property1`
     FOREIGN KEY (`propertycode`)
-    REFERENCES `mydb`.`property` (`propertycode`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `property` (`propertycode`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`resident`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`resident` (
-  `residentid` INT NOT NULL,
-  `renter` TINYINT(1) NOT NULL,
-  `rel_homeowner` VARCHAR(45) NOT NULL,
-  `householdid` INT NOT NULL,
-  `authorized` TINYINT(1) NOT NULL,
-  `status` ENUM('A', 'L', 'C') NOT NULL,
-  `last_update` DATETIME NOT NULL,
+CREATE TABLE `resident` (
+  `residentid`          INT                         NOT NULL,
+  `renter`              TINYINT(1)                  NOT NULL,
+  `rel_homeowner`       VARCHAR(45)                 NOT NULL,
+  `householdid`         INT                         NOT NULL,
+  `authorized`          TINYINT(1)                  NOT NULL,
+  `status`              ENUM('A', 'L', 'C')         NOT NULL,
+  `last_update`         DATETIME                    NOT NULL,
   PRIMARY KEY (`residentid`),
-  INDEX `fk_resident_individual1_idx` (`residentid` ASC),
-  INDEX `fk_resident_household1_idx` (`householdid` ASC),
+  INDEX `fk_resident_individual1_idx` (`residentid` ASC) VISIBLE,
+  INDEX `fk_resident_household1_idx` (`householdid` ASC) VISIBLE,
   CONSTRAINT `fk_resident_individual1`
     FOREIGN KEY (`residentid`)
-    REFERENCES `mydb`.`individual` (`individualid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `individual` (`individualid`)
+    ,
   CONSTRAINT `fk_resident_household1`
     FOREIGN KEY (`householdid`)
-    REFERENCES `mydb`.`household` (`householdid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `household` (`householdid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`payment`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`payment` (
-  `orno` INT NOT NULL,
-  `amount` FLOAT NOT NULL,
-  PRIMARY KEY (`orno`))
-ENGINE = InnoDB;
+CREATE TABLE `payment` (
+  `orno`        INT          NOT NULL,
+  `amount`      FLOAT        NOT NULL,
+  PRIMARY KEY (`orno`));
 
 
--- -----------------------------------------------------
--- Table `mydb`.`election_info`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`election_info` (
-  `elec_date` DATE NOT NULL,
-  `venue` VARCHAR(45) NOT NULL,
-  `quorum` TINYINT(1) NOT NULL,
-  `wit_lastname` VARCHAR(45) NOT NULL,
-  `wit_firstname` VARCHAR(45) NOT NULL,
-  `wit_mi` VARCHAR(45) NOT NULL,
-  `wit_mobile` VARCHAR(45) NULL,
-  PRIMARY KEY (`elec_date`))
-ENGINE = InnoDB;
+CREATE TABLE `election_info` (
+  `elec_date`        DATE               NOT NULL,
+  `venue`            VARCHAR(45)        NOT NULL,
+  `quorum`           TINYINT(1)         NOT NULL,
+  `wit_lastname`     VARCHAR(45)        NOT NULL,
+  `wit_firstname`    VARCHAR(45)        NOT NULL,
+  `wit_mi`           VARCHAR(45)        NOT NULL,
+  `wit_mobile`       VARCHAR(45)        NULL,
+  PRIMARY KEY (`elec_date`));
 
 
--- -----------------------------------------------------
--- Table `mydb`.`hoa_officer`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`hoa_officer` (
-  `homeownerid` INT NOT NULL,
-  `hoaname` VARCHAR(100) NOT NULL,
-  `position` ENUM('P', 'VP', 'T', 'A', 'S') NOT NULL,
-  `start_date` DATE NOT NULL,
-  `end_date` DATE NOT NULL,
-  `elec_date` DATE NOT NULL,
-  `avail_Mon` ENUM('M', 'A', 'NA') NOT NULL,
-  `avail_Tue` ENUM('M', 'A', 'NA') NOT NULL,
-  `avail_Wed` ENUM('M', 'A', 'NA') NOT NULL,
-  `avail_Thu` ENUM('M', 'A', 'NA') NOT NULL,
-  `avail_Fri` ENUM('M', 'A', 'NA') NOT NULL,
-  `avail_Sat` ENUM('M', 'A', 'NA') NOT NULL,
-  `avail_Sun` ENUM('M', 'A', 'NA') NOT NULL,
+CREATE TABLE `hoa_officer` (
+  `homeownerid`    INT                              NOT NULL,
+  `hoaname`        VARCHAR(100)                     NOT NULL,
+  `position`       ENUM('P', 'VP', 'T', 'A', 'S')   NOT NULL,
+  `start_date`     DATE                             NOT NULL,
+  `end_date`       DATE                             NOT NULL,
+  `elec_date`      DATE                             NOT NULL,
+  `avail_Mon`      ENUM('M', 'A', 'NA')             NOT NULL,
+  `avail_Tue`      ENUM('M', 'A', 'NA')             NOT NULL,
+  `avail_Wed`      ENUM('M', 'A', 'NA')             NOT NULL,
+  `avail_Thu`      ENUM('M', 'A', 'NA')             NOT NULL,
+  `avail_Fri`      ENUM('M', 'A', 'NA')             NOT NULL,
+  `avail_Sat`      ENUM('M', 'A', 'NA')             NOT NULL,
+  `avail_Sun`      ENUM('M', 'A', 'NA')             NOT NULL,
   PRIMARY KEY (`homeownerid`, `position`),
-  INDEX `hoaname_idx` (`hoaname` ASC),
-  INDEX `elec_date_idx` (`elec_date` ASC),
+  INDEX `hoaname_idx` (`hoaname` ASC) VISIBLE,
+  INDEX `elec_date_idx` (`elec_date` ASC) VISIBLE,
   CONSTRAINT `homeownerid`
     FOREIGN KEY (`homeownerid`)
-    REFERENCES `mydb`.`homeowner` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `homeowner` (`homeownerid`)
+    ,
   CONSTRAINT `hoaname`
     FOREIGN KEY (`hoaname`)
-    REFERENCES `mydb`.`hoa` (`hoaname`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `hoa` (`hoaname`)
+    ,
   CONSTRAINT `elec_date`
     FOREIGN KEY (`elec_date`)
-    REFERENCES `mydb`.`election_info` (`elec_date`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `election_info` (`elec_date`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`resident_id`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`resident_id` (
-  `cardno` INT NOT NULL,
-  `request_date` DATE NOT NULL,
-  `request_reason` VARCHAR(45) NOT NULL,
-  `issue_date` DATE NOT NULL,
-  `hoa_officer` INT NOT NULL,
-  `residentid` INT NOT NULL,
-  `status` ENUM('A', 'L', 'C') NOT NULL,
-  `orno` INT NULL,
+CREATE TABLE `resident_id` (
+  `cardno`          INT                     NOT NULL,
+  `request_date`    DATE                    NOT NULL,
+  `request_reason`  VARCHAR(45)             NOT NULL,
+  `issue_date`      DATE                    NOT NULL,
+  `hoa_officer`     INT                     NOT NULL,
+  `residentid`      INT                     NOT NULL,
+  `status`          ENUM('A', 'L', 'C')     NOT NULL,
+  `orno`            INT                     NULL,
   PRIMARY KEY (`cardno`),
-  INDEX `fk_resident_id_resident1_idx` (`residentid` ASC),
-  INDEX `fk_resident_id_payment1_idx` (`orno` ASC),
-  INDEX `fk_resident_id_1_idx` (`hoa_officer` ASC),
+  INDEX `fk_resident_id_resident1_idx` (`residentid` ASC) VISIBLE,
+  INDEX `fk_resident_id_payment1_idx` (`orno` ASC) VISIBLE,
+  INDEX `fk_resident_id_1_idx` (`hoa_officer` ASC) VISIBLE,
   CONSTRAINT `fk_resident_id_resident1`
     FOREIGN KEY (`residentid`)
-    REFERENCES `mydb`.`resident` (`residentid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `resident` (`residentid`)
+    ,
   CONSTRAINT `fk_resident_id_payment1`
     FOREIGN KEY (`orno`)
-    REFERENCES `mydb`.`payment` (`orno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `payment` (`orno`)
+    ,
   CONSTRAINT `fk_resident_id_1`
     FOREIGN KEY (`hoa_officer`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `hoa_officer` (`homeownerid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`asset`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`asset` (
+CREATE TABLE `asset` (
   `assetid` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `description` VARCHAR(45) NOT NULL,
@@ -374,25 +270,19 @@ CREATE TABLE IF NOT EXISTS `mydb`.`asset` (
   `location_assetid` INT NULL,
   `hoaname` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`assetid`),
-  INDEX `fk_asset_hoa1_idx` (`hoaname` ASC),
-  INDEX `fk_asset_asset1_idx` (`location_assetid` ASC),
+  INDEX `fk_asset_hoa1_idx` (`hoaname` ASC) VISIBLE,
+  INDEX `fk_asset_asset1_idx` (`location_assetid` ASC) VISIBLE,
   CONSTRAINT `fk_asset_hoa1`
     FOREIGN KEY (`hoaname`)
-    REFERENCES `mydb`.`hoa` (`hoaname`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `hoa` (`hoaname`)
+    ,
   CONSTRAINT `fk_asset_asset1`
     FOREIGN KEY (`location_assetid`)
-    REFERENCES `mydb`.`asset` (`assetid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset` (`assetid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`asset_transfer`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`asset_transfer` (
+CREATE TABLE `asset_transfer` (
   `asset_transferid` INT NOT NULL,
   `assetid` INT NOT NULL,
   `schedule` DATE NOT NULL,
@@ -407,31 +297,24 @@ CREATE TABLE IF NOT EXISTS `mydb`.`asset_transfer` (
   `mobilenum` INT(11) NOT NULL,
   `orno` INT NULL,
   PRIMARY KEY (`asset_transferid`),
-  INDEX `assetid_idx` (`assetid` ASC),
-  INDEX `fk_asset_transfer_1_idx` (`hoa_officer` ASC),
-  INDEX `fk_asset_transfer_2_idx` (`orno` ASC),
+  INDEX `assetid_idx` (`assetid` ASC) VISIBLE,
+  INDEX `fk_asset_transfer_1_idx` (`hoa_officer` ASC) VISIBLE,
+  INDEX `fk_asset_transfer_2_idx` (`orno` ASC) VISIBLE,
   CONSTRAINT `assetid`
     FOREIGN KEY (`assetid`)
-    REFERENCES `mydb`.`asset` (`assetid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `asset` (`assetid`)
+    ,
   CONSTRAINT `fk_asset_transfer_1`
     FOREIGN KEY (`hoa_officer`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `hoa_officer` (`homeownerid`)
+    ,
   CONSTRAINT `fk_asset_transfer_2`
     FOREIGN KEY (`orno`)
-    REFERENCES `mydb`.`payment` (`orno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `payment` (`orno`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`asset_activity`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`asset_activity` (
+CREATE TABLE `asset_activity` (
   `asset_activityid` INT NOT NULL,
   `assetid` INT NOT NULL,
   `description` VARCHAR(100) NOT NULL,
@@ -443,61 +326,44 @@ CREATE TABLE IF NOT EXISTS `mydb`.`asset_activity` (
   `orno` INT NULL,
   `status` ENUM('S', 'O', 'C') NOT NULL,
   PRIMARY KEY (`asset_activityid`),
-  INDEX `fk_asset_activity_asset1_idx` (`assetid` ASC),
-  INDEX `fk_asset_activity_hoa_officer1_idx` (`hoa_officer` ASC),
-  INDEX `fk_asset_activity_1_idx` (`orno` ASC),
+  INDEX `fk_asset_activity_asset1_idx` (`assetid` ASC) VISIBLE,
+  INDEX `fk_asset_activity_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
+  INDEX `fk_asset_activity_1_idx` (`orno` ASC) VISIBLE,
   CONSTRAINT `fk_asset_activity_asset1`
     FOREIGN KEY (`assetid`)
-    REFERENCES `mydb`.`asset` (`assetid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `asset` (`assetid`)
+    ,
   CONSTRAINT `fk_asset_activity_hoa_officer1`
     FOREIGN KEY (`hoa_officer`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `hoa_officer` (`homeownerid`)
+    ,
   CONSTRAINT `fk_asset_activity_1`
     FOREIGN KEY (`orno`)
-    REFERENCES `mydb`.`payment` (`orno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `payment` (`orno`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`delete_activity`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`delete_activity` (
+CREATE TABLE `delete_activity` (
   `asset_activityid` INT NOT NULL,
   `pres_approval` TINYINT(1) NOT NULL,
   PRIMARY KEY (`asset_activityid`),
   CONSTRAINT `fk_delete_activity_asset_activity1`
     FOREIGN KEY (`asset_activityid`)
-    REFERENCES `mydb`.`asset_activity` (`asset_activityid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset_activity` (`asset_activityid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`delete_transfer`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`delete_transfer` (
+CREATE TABLE `delete_transfer` (
   `asset_transferid` INT NOT NULL,
   `pres_approval` TINYINT(1) NOT NULL,
   PRIMARY KEY (`asset_transferid`),
   CONSTRAINT `fk_delete_transfer_asset_transfer1`
     FOREIGN KEY (`asset_transferid`)
-    REFERENCES `mydb`.`asset_transfer` (`asset_transferid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset_transfer` (`asset_transferid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`asset_rental`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`asset_rental` (
+CREATE TABLE `asset_rental` (
   `asset_rentalid` INT NOT NULL,
   `renter_residentid` INT NOT NULL,
   `reservation_date` DATE NOT NULL,
@@ -508,68 +374,50 @@ CREATE TABLE IF NOT EXISTS `mydb`.`asset_rental` (
   `return_details` VARCHAR(200) NOT NULL,
   `orno` INT NULL,
   PRIMARY KEY (`asset_rentalid`),
-  INDEX `fk_asset_rental_hoa_officer1_idx` (`hoa_officer` ASC),
-  INDEX `fk_asset_rental_resident1_idx` (`renter_residentid` ASC),
-  INDEX `fk_asset_rental_1_idx` (`orno` ASC),
+  INDEX `fk_asset_rental_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
+  INDEX `fk_asset_rental_resident1_idx` (`renter_residentid` ASC) VISIBLE,
+  INDEX `fk_asset_rental_1_idx` (`orno` ASC) VISIBLE,
   CONSTRAINT `fk_asset_rental_hoa_officer1`
     FOREIGN KEY (`hoa_officer`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `hoa_officer` (`homeownerid`)
+    ,
   CONSTRAINT `fk_asset_rental_resident1`
     FOREIGN KEY (`renter_residentid`)
-    REFERENCES `mydb`.`resident` (`residentid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `resident` (`residentid`)
+    ,
   CONSTRAINT `fk_asset_rental_1`
     FOREIGN KEY (`orno`)
-    REFERENCES `mydb`.`payment` (`orno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `payment` (`orno`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`assets_rented`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`assets_rented` (
+CREATE TABLE `assets_rented` (
   `assetid` INT NOT NULL,
   `asset_rentalid` INT NOT NULL,
   `cost` FLOAT NOT NULL,
   PRIMARY KEY (`assetid`, `asset_rentalid`),
-  INDEX `fk_assets_rented_asset_rental1_idx` (`asset_rentalid` ASC),
+  INDEX `fk_assets_rented_asset_rental1_idx` (`asset_rentalid` ASC) VISIBLE,
   CONSTRAINT `fk_assets_rented_asset1`
     FOREIGN KEY (`assetid`)
-    REFERENCES `mydb`.`asset` (`assetid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `asset` (`assetid`)
+    ,
   CONSTRAINT `fk_assets_rented_asset_rental1`
     FOREIGN KEY (`asset_rentalid`)
-    REFERENCES `mydb`.`asset_rental` (`asset_rentalid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset_rental` (`asset_rentalid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`delete_rental`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`delete_rental` (
+CREATE TABLE `delete_rental` (
   `asset_rentalid` INT NOT NULL,
   `pres_approval` TINYINT(1) NULL,
   PRIMARY KEY (`asset_rentalid`),
   CONSTRAINT `fk_delete_rental_asset_rental1`
     FOREIGN KEY (`asset_rentalid`)
-    REFERENCES `mydb`.`asset_rental` (`asset_rentalid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset_rental` (`asset_rentalid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`asset_donation`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`asset_donation` (
+CREATE TABLE `asset_donation` (
   `asset_donationid` INT NOT NULL,
   `donor_lastname` VARCHAR(45) NOT NULL,
   `donor_firstname` VARCHAR(45) NOT NULL,
@@ -577,65 +425,45 @@ CREATE TABLE IF NOT EXISTS `mydb`.`asset_donation` (
   `donor_add` VARCHAR(45) NULL,
   `hoa_officer` INT NOT NULL,
   PRIMARY KEY (`asset_donationid`),
-  INDEX `fk_asset_donation_hoa_officer1_idx` (`hoa_officer` ASC),
+  INDEX `fk_asset_donation_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
   CONSTRAINT `fk_asset_donation_hoa_officer1`
     FOREIGN KEY (`hoa_officer`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `hoa_officer` (`homeownerid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`items_donated`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`items_donated` (
+CREATE TABLE `items_donated` (
   `asset_donationid` INT NOT NULL,
   `item_name` VARCHAR(45) NOT NULL,
   `amount` FLOAT NOT NULL,
   PRIMARY KEY (`asset_donationid`, `item_name`),
   CONSTRAINT `fk_items_donated_asset_donation1`
     FOREIGN KEY (`asset_donationid`)
-    REFERENCES `mydb`.`asset_donation` (`asset_donationid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset_donation` (`asset_donationid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`donation_event`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`donation_event` (
+CREATE TABLE `donation_event` (
   `asset_donationid` INT NOT NULL,
   `pic_filename` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`asset_donationid`, `pic_filename`),
   CONSTRAINT `fk_donation_event_asset_donation1`
     FOREIGN KEY (`asset_donationid`)
-    REFERENCES `mydb`.`asset_donation` (`asset_donationid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset_donation` (`asset_donationid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`delete_donation`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`delete_donation` (
+CREATE TABLE `delete_donation` (
   `asset_donationid` INT NOT NULL,
   `pres_approval` TINYINT(1) NOT NULL,
   PRIMARY KEY (`asset_donationid`),
   CONSTRAINT `fk_delete_donation_asset_donation1`
     FOREIGN KEY (`asset_donationid`)
-    REFERENCES `mydb`.`asset_donation` (`asset_donationid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `asset_donation` (`asset_donationid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`program`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`program` (
+CREATE TABLE `program` (
   `program_id` INT NOT NULL,
   `hoa_name` VARCHAR(45) NOT NULL,
   `program_desc` VARCHAR(45) NOT NULL,
@@ -650,48 +478,36 @@ CREATE TABLE IF NOT EXISTS `mydb`.`program` (
   `program_status` ENUM('OR', 'CR', 'CA', 'CO') NOT NULL,
   `budget` DECIMAL(6,2) NOT NULL,
   PRIMARY KEY (`program_id`),
-  INDEX `fk_program_1_idx` (`hoa_name` ASC),
-  INDEX `fk_program_2_idx` (`officer_id` ASC),
+  INDEX `fk_program_1_idx` (`hoa_name` ASC) VISIBLE,
+  INDEX `fk_program_2_idx` (`officer_id` ASC) VISIBLE,
   CONSTRAINT `fk_program_1`
     FOREIGN KEY (`hoa_name`)
-    REFERENCES `mydb`.`hoa` (`hoaname`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `hoa` (`hoaname`)
+    ,
   CONSTRAINT `fk_program_2`
     FOREIGN KEY (`officer_id`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `hoa_officer` (`homeownerid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`committee`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`committee` (
+CREATE TABLE `committee` (
   `committee_id` INT NOT NULL,
   `program_id` INT NOT NULL,
   `hoa_officerid` INT NOT NULL,
   PRIMARY KEY (`committee_id`),
-  INDEX `fk_committee_1_idx` (`program_id` ASC),
-  INDEX `fk_committee_2_idx` (`hoa_officerid` ASC),
+  INDEX `fk_committee_1_idx` (`program_id` ASC) VISIBLE,
+  INDEX `fk_committee_2_idx` (`hoa_officerid` ASC) VISIBLE,
   CONSTRAINT `fk_committee_1`
     FOREIGN KEY (`program_id`)
-    REFERENCES `mydb`.`program` (`program_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `program` (`program_id`)
+    ,
   CONSTRAINT `fk_committee_2`
     FOREIGN KEY (`hoa_officerid`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `hoa_officer` (`homeownerid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`program_evidence`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`program_evidence` (
+CREATE TABLE `program_evidence` (
   `evidence_id` INT NOT NULL,
   `program_id` INT NOT NULL,
   `evidence_desc` VARCHAR(200) NOT NULL,
@@ -700,55 +516,42 @@ CREATE TABLE IF NOT EXISTS `mydb`.`program_evidence` (
   `officer_id` INT NOT NULL,
   `date_submitted` DATE NOT NULL,
   PRIMARY KEY (`evidence_id`),
-  INDEX `fk_program_evidence_1_idx` (`program_id` ASC),
-  INDEX `fk_program_evidence_2_idx` (`resident_id` ASC),
-  INDEX `fk_program_evidence_3_idx` (`officer_id` ASC),
+  INDEX `fk_program_evidence_1_idx` (`program_id` ASC) VISIBLE,
+  INDEX `fk_program_evidence_2_idx` (`resident_id` ASC) VISIBLE,
+  INDEX `fk_program_evidence_3_idx` (`officer_id` ASC) VISIBLE,
   CONSTRAINT `fk_program_evidence_1`
     FOREIGN KEY (`program_id`)
-    REFERENCES `mydb`.`program` (`program_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `program` (`program_id`)
+    ,
   CONSTRAINT `fk_program_evidence_2`
     FOREIGN KEY (`resident_id`)
-    REFERENCES `mydb`.`resident` (`residentid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `resident` (`residentid`)
+    ,
   CONSTRAINT `fk_program_evidence_3`
     FOREIGN KEY (`officer_id`)
-    REFERENCES `mydb`.`hoa_officer` (`homeownerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `hoa_officer` (`homeownerid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`registration`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`registration` (
+CREATE TABLE `registration` (
   `reg_id` INT NOT NULL,
   `program_id` INT NOT NULL,
   `resident_id` INT NOT NULL,
   `isPriority` TINYINT(1) NOT NULL,
   PRIMARY KEY (`reg_id`),
-  INDEX `fk_registration_1_idx` (`program_id` ASC),
-  INDEX `fk_registration_2_idx` (`resident_id` ASC),
+  INDEX `fk_registration_1_idx` (`program_id` ASC) VISIBLE,
+  INDEX `fk_registration_2_idx` (`resident_id` ASC) VISIBLE,
   CONSTRAINT `fk_registration_1`
     FOREIGN KEY (`program_id`)
-    REFERENCES `mydb`.`program` (`program_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `program` (`program_id`)
+    ,
   CONSTRAINT `fk_registration_2`
     FOREIGN KEY (`resident_id`)
-    REFERENCES `mydb`.`resident` (`residentid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `resident` (`residentid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`participant_approval`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`participant_approval` (
+CREATE TABLE `participant_approval` (
   `reg_id` INT NOT NULL,
   `member_id` INT NOT NULL,
   `isAccepted` TINYINT(1) NOT NULL,
@@ -756,40 +559,29 @@ CREATE TABLE IF NOT EXISTS `mydb`.`participant_approval` (
   PRIMARY KEY (`reg_id`),
   CONSTRAINT `fk_participant_approval_1`
     FOREIGN KEY (`reg_id`)
-    REFERENCES `mydb`.`registration` (`reg_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `registration` (`reg_id`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`members`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`members` (
+CREATE TABLE `members` (
   `member_id` INT NOT NULL,
   `committee_id` INT NOT NULL,
   `resident_id` INT NOT NULL,
   `position` ENUM('M', 'H') NOT NULL,
   PRIMARY KEY (`member_id`),
-  INDEX `fk_members_1_idx` (`committee_id` ASC),
-  INDEX `fk_members_2_idx` (`resident_id` ASC),
+  INDEX `fk_members_1_idx` (`committee_id` ASC) VISIBLE,
+  INDEX `fk_members_2_idx` (`resident_id` ASC) VISIBLE,
   CONSTRAINT `fk_members_1`
     FOREIGN KEY (`committee_id`)
-    REFERENCES `mydb`.`committee` (`committee_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `committee` (`committee_id`)
+    ,
   CONSTRAINT `fk_members_2`
     FOREIGN KEY (`resident_id`)
-    REFERENCES `mydb`.`resident` (`residentid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `resident` (`residentid`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`feedback`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`feedback` (
+CREATE TABLE `feedback` (
   `reg_id` INT NOT NULL,
   `feedback` VARCHAR(200) NOT NULL,
   `rating` ENUM('1', '2', '3', '4', '5') NOT NULL,
@@ -797,16 +589,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`feedback` (
   PRIMARY KEY (`reg_id`),
   CONSTRAINT `fk_feedback_1`
     FOREIGN KEY (`reg_id`)
-    REFERENCES `mydb`.`registration` (`reg_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `registration` (`reg_id`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`expenses`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`expenses` (
+CREATE TABLE `expenses` (
   `expense_id` INT NOT NULL,
   `member_id` INT NOT NULL,
   `expense_desc` VARCHAR(100) NOT NULL,
@@ -814,30 +601,19 @@ CREATE TABLE IF NOT EXISTS `mydb`.`expenses` (
   `amount` DECIMAL(5,2) NOT NULL,
   `official_receipt` BLOB NOT NULL,
   PRIMARY KEY (`expense_id`),
-  INDEX `fk_expenses_1_idx` (`member_id` ASC),
+  INDEX `fk_expenses_1_idx` (`member_id` ASC) VISIBLE,
   CONSTRAINT `fk_expenses_1`
     FOREIGN KEY (`member_id`)
-    REFERENCES `mydb`.`members` (`member_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `members` (`member_id`)
+    );
 
 
--- -----------------------------------------------------
--- Table `mydb`.`expense_type`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`expense_type` (
+CREATE TABLE `expense_type` (
   `expense_id` INT NOT NULL,
   `type` ENUM('MA', 'S', 'M', 'O') NOT NULL,
   PRIMARY KEY (`expense_id`),
   CONSTRAINT `fk_expense_type_1`
     FOREIGN KEY (`expense_id`)
-    REFERENCES `mydb`.`expenses` (`expense_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `expenses` (`expense_id`)
+    );
 
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
