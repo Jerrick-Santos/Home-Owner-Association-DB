@@ -1,0 +1,31 @@
+Tables that needs to have AUTO_INCREMENT or (AI) in workbench
+
+AUTO_INCREMENT - This basically means that the user is not responsible for assigning an int ID but the AUTO_INCREMENT function(?)
+will automatically generate integers as rows (records) are added in the table. 
+https://www.w3schools.com/sql/sql_autoincrement.asp 
+
+
+STATUS LEGEND:
+CHECKED - this means the AUTO_INCREMENT has been implemented in the latest .mwb file
+NOPE - Di pa nalalagay sa .mwb
+
+FORMAT:
+TABLE - Column | STATUS
+
+hoa_docs - submission_type INT | CHECKED
+individual - individualid INT | CHECKED
+asset_rental - asset_rentalid INT | NOPE
+payment - orno INT (not sure if this should be AUTO_INCREMENT) | NOPE
+program - program_id INT | NOPE
+members - member_id INT | NOPE
+committee- committee_id INT | NOPE
+expenses - expense_id INT | NOPE
+program_evidence = evidence_id INT | NOPE
+registration - reg_id INT | NOPE
+-- add nalang kayo if may namiss ako (pretty sure meron HAHAHA)
+
+HOW TO IMPLEMENT in .mwb via workbench VM: 
+1. Open .mwb 
+2. Click Table 
+3. Click Columns Tav 
+4. Select the column and check (AI) 

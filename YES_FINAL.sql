@@ -491,129 +491,124 @@ CREATE TABLE `program` (
 
 
 CREATE TABLE `committee` (
-  `committee_id` INT NOT NULL,
-  `program_id` INT NOT NULL,
-  `hoa_officerid` INT NOT NULL,
+  `committee_id`    INT     NOT NULL,
+  `program_id`      INT     NOT NULL,
+  `hoa_officerid`   INT     NOT NULL,
   PRIMARY KEY (`committee_id`),
   INDEX `fk_committee_1_idx` (`program_id` ASC) VISIBLE,
   INDEX `fk_committee_2_idx` (`hoa_officerid` ASC) VISIBLE,
   CONSTRAINT `fk_committee_1`
-    FOREIGN KEY (`program_id`)
-    REFERENCES `program` (`program_id`)
-    ,
+  FOREIGN KEY (`program_id`)
+  REFERENCES `program` (`program_id`),
   CONSTRAINT `fk_committee_2`
-    FOREIGN KEY (`hoa_officerid`)
-    REFERENCES `hoa_officer` (`homeownerid`)
+  FOREIGN KEY (`hoa_officerid`)
+  REFERENCES `hoa_officer` (`homeownerid`)
     );
 
 
 CREATE TABLE `program_evidence` (
-  `evidence_id` INT NOT NULL,
-  `program_id` INT NOT NULL,
-  `evidence_desc` VARCHAR(200) NOT NULL,
-  `filename` VARCHAR(45) NOT NULL,
-  `resident_id` INT NOT NULL,
-  `officer_id` INT NOT NULL,
-  `date_submitted` DATE NOT NULL,
+  `evidence_id`     INT           NOT NULL,
+  `program_id`      INT           NOT NULL,
+  `evidence_desc`   VARCHAR(200)  NOT NULL,
+  `filename`        VARCHAR(45)   NOT NULL,
+  `resident_id`     INT           NOT NULL,
+  `officer_id`      INT           NOT NULL,
+  `date_submitted`  DATE          NOT NULL,
   PRIMARY KEY (`evidence_id`),
   INDEX `fk_program_evidence_1_idx` (`program_id` ASC) VISIBLE,
   INDEX `fk_program_evidence_2_idx` (`resident_id` ASC) VISIBLE,
   INDEX `fk_program_evidence_3_idx` (`officer_id` ASC) VISIBLE,
   CONSTRAINT `fk_program_evidence_1`
-    FOREIGN KEY (`program_id`)
-    REFERENCES `program` (`program_id`)
-    ,
+  FOREIGN KEY (`program_id`)
+  REFERENCES `program` (`program_id`),
   CONSTRAINT `fk_program_evidence_2`
-    FOREIGN KEY (`resident_id`)
-    REFERENCES `resident` (`residentid`)
-    ,
+  FOREIGN KEY (`resident_id`)
+  REFERENCES `resident` (`residentid`),
   CONSTRAINT `fk_program_evidence_3`
-    FOREIGN KEY (`officer_id`)
-    REFERENCES `hoa_officer` (`homeownerid`)
+  FOREIGN KEY (`officer_id`)
+  REFERENCES `hoa_officer` (`homeownerid`)
     );
 
 
 CREATE TABLE `registration` (
-  `reg_id` INT NOT NULL,
-  `program_id` INT NOT NULL,
-  `resident_id` INT NOT NULL,
-  `isPriority` TINYINT(1) NOT NULL,
+  `reg_id`      INT         NOT NULL,
+  `program_id`  INT         NOT NULL,
+  `resident_id` INT         NOT NULL,
+  `isPriority`  TINYINT(1)  NOT NULL,
   PRIMARY KEY (`reg_id`),
   INDEX `fk_registration_1_idx` (`program_id` ASC) VISIBLE,
   INDEX `fk_registration_2_idx` (`resident_id` ASC) VISIBLE,
   CONSTRAINT `fk_registration_1`
-    FOREIGN KEY (`program_id`)
-    REFERENCES `program` (`program_id`)
-    ,
+  FOREIGN KEY (`program_id`)
+  REFERENCES `program` (`program_id`),
   CONSTRAINT `fk_registration_2`
-    FOREIGN KEY (`resident_id`)
-    REFERENCES `resident` (`residentid`)
+  FOREIGN KEY (`resident_id`)
+  REFERENCES `resident` (`residentid`)
     );
 
 
 CREATE TABLE `participant_approval` (
-  `reg_id` INT NOT NULL,
-  `member_id` INT NOT NULL,
-  `isAccepted` TINYINT(1) NOT NULL,
-  `reason` VARCHAR(100) NULL,
+  `reg_id`        INT             NOT NULL,
+  `member_id`     INT             NOT NULL,
+  `isAccepted`    TINYINT(1)      NOT NULL,
+  `reason`        VARCHAR(100)    NULL,
   PRIMARY KEY (`reg_id`),
   CONSTRAINT `fk_participant_approval_1`
-    FOREIGN KEY (`reg_id`)
-    REFERENCES `registration` (`reg_id`)
+  FOREIGN KEY (`reg_id`)
+  REFERENCES `registration` (`reg_id`)
     );
 
 
 CREATE TABLE `members` (
-  `member_id` INT NOT NULL,
-  `committee_id` INT NOT NULL,
-  `resident_id` INT NOT NULL,
-  `position` ENUM('M', 'H') NOT NULL,
+  `member_id`       INT               NOT NULL,
+  `committee_id`    INT               NOT NULL,
+  `resident_id`     INT               NOT NULL,
+  `position`        ENUM('M', 'H')    NOT NULL,
   PRIMARY KEY (`member_id`),
   INDEX `fk_members_1_idx` (`committee_id` ASC) VISIBLE,
   INDEX `fk_members_2_idx` (`resident_id` ASC) VISIBLE,
   CONSTRAINT `fk_members_1`
-    FOREIGN KEY (`committee_id`)
-    REFERENCES `committee` (`committee_id`)
-    ,
+  FOREIGN KEY (`committee_id`)
+  REFERENCES `committee` (`committee_id`),
   CONSTRAINT `fk_members_2`
-    FOREIGN KEY (`resident_id`)
-    REFERENCES `resident` (`residentid`)
+  FOREIGN KEY (`resident_id`)
+  REFERENCES `resident` (`residentid`)
     );
 
 
 CREATE TABLE `feedback` (
-  `reg_id` INT NOT NULL,
-  `feedback` VARCHAR(200) NOT NULL,
-  `rating` ENUM('1', '2', '3', '4', '5') NOT NULL,
-  `suggestion` VARCHAR(200) NULL,
+  `reg_id`    INT                             NOT NULL,
+  `feedback`  VARCHAR(200)                    NOT NULL,
+  `rating`    ENUM('1', '2', '3', '4', '5')   NOT NULL,
+  `suggestion` VARCHAR(200)                       NULL,
   PRIMARY KEY (`reg_id`),
   CONSTRAINT `fk_feedback_1`
-    FOREIGN KEY (`reg_id`)
-    REFERENCES `registration` (`reg_id`)
+  FOREIGN KEY (`reg_id`)
+  REFERENCES `registration` (`reg_id`)
     );
 
 
 CREATE TABLE `expenses` (
-  `expense_id` INT NOT NULL,
-  `member_id` INT NOT NULL,
-  `expense_desc` VARCHAR(100) NOT NULL,
-  `exp_date` DATE NOT NULL,
-  `amount` DECIMAL(5,2) NOT NULL,
-  `official_receipt` BLOB NOT NULL,
+  `expense_id`        INT             NOT NULL,
+  `member_id`         INT             NOT NULL,
+  `expense_desc`      VARCHAR(100)    NOT NULL,
+  `exp_date`          DATE            NOT NULL,
+  `amount`            DECIMAL(5,2)    NOT NULL,
+  `official_receipt`  BLOB            NOT NULL,
   PRIMARY KEY (`expense_id`),
   INDEX `fk_expenses_1_idx` (`member_id` ASC) VISIBLE,
   CONSTRAINT `fk_expenses_1`
-    FOREIGN KEY (`member_id`)
-    REFERENCES `members` (`member_id`)
+  FOREIGN KEY (`member_id`)
+  REFERENCES `members` (`member_id`)
     );
 
 
 CREATE TABLE `expense_type` (
-  `expense_id` INT NOT NULL,
-  `type` ENUM('MA', 'S', 'M', 'O') NOT NULL,
+  `expense_id`      INT                       NOT NULL,
+  `type`            ENUM('MA', 'S', 'M', 'O') NOT NULL,
   PRIMARY KEY (`expense_id`),
   CONSTRAINT `fk_expense_type_1`
-    FOREIGN KEY (`expense_id`)
-    REFERENCES `expenses` (`expense_id`)
+  FOREIGN KEY (`expense_id`)
+  REFERENCES `expenses` (`expense_id`)
     );
 
