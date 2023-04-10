@@ -1,5 +1,39 @@
--- ZIPCODES
+-- REGIONS
 
+INSERT INTO regions (
+    region
+)
+VALUE (
+    'REGION1'
+);
+
+INSERT INTO regions (
+    region
+)
+VALUE (
+    'REGION2'
+);
+
+-- PROVINCE 
+INSERT INTO provinces (
+    province,
+    region
+)
+VALUE (
+    'PROVINCE1',
+    'REGION1'
+);
+
+INSERT INTO provinces (
+    province,
+    region
+)
+VALUE (
+    'PROVINCE2',
+    'REGION2'
+);
+
+-- ZIPCODES
 INSERT INTO zipcodes (
     barangay, 
     city,
@@ -26,39 +60,6 @@ VALUES(
     '5678'
 );
 
--- PROVINCE 
-INSERT INTO provinces (
-    province,
-    region
-)
-VALUE (
-    'PROVINCE1',
-    'REGION1'
-);
-
-INSERT INTO provinces (
-    province,
-    region
-)
-VALUE (
-    'PROVINCE2',
-    'REGION2'
-);
--- REGIONS
-
-INSERT INTO regions (
-    region
-)
-VALUE (
-    'REGION1'
-);
-
-INSERT INTO regions (
-    region
-)
-VALUE (
-    'REGION2'
-);
 -- HOA 
 INSERT INTO hoa (
         hoaname,
