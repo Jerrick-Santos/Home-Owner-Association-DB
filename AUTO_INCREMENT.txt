@@ -14,7 +14,11 @@ TABLE - Column | STATUS
 
 hoa_docs - submission_type INT | CHECKED
 individual - individualid INT | CHECKED
-assetid INT | CHECKED
+assets - assetid INT | CHECKED
+asset_rental - asset_rentalid INT | CHECKED
+asset_activity - asset_activityid INT | CHECKED
+asset_transfer - asset_transferid INT | CHECKED
+asset_donation - asset_donationid INT | CHECKED
 payment - orno INT (not sure if this should be AUTO_INCREMENT) | CHECKED
 program - program_id INT | CHECKED
 members - member_id INT | CHECKED
@@ -22,6 +26,8 @@ committee- committee_id INT | CHECKED
 expenses - expense_id INT | CHECKED
 program_evidence = evidence_id INT | CHECKED
 registration - reg_id INT | CHECKED
+household - household_id INT | CHECKED
+resident_id - cardno INT | CHECKED
 -- add nalang kayo if may namiss ako (pretty sure meron HAHAHA)
 
 HOW TO IMPLEMENT in .mwb via workbench VM: 
