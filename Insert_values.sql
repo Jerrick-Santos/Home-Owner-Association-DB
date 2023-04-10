@@ -143,22 +143,13 @@ INSERT INTO individual (
     email,
     birthday,
     gender,
-    facebook,
+    facebook_url,
     pic_filename, 
     undertaking
 ) VALUES ('Santos', 'Jerrick', 'Q.', 'jerrick@gmail.com', '2003-01-22', 'M', 'www.facebook/jer.com', 'jerrick.png', '0'),
-         ('Reyes', 'Carlo', 'O.', 'carlo@gmail.com', '2001-09-11',  'M', 'www.facebook/car.com', 'carlo.png', '0');
-
-INSERT INTO individual (
-    lastname,
-    firstname,
-    email,
-    birthday,
-    gender,
-    pic_filename, 
-    undertaking
-) VALUES ('Arao', 'Patty', 'pat@gmail.com', 'F', 'patty.png', '1'),
-         ('Andres', 'Nathan', 'nathan@gmail.com', 'M', 'neytan.png', '1');
+         ('Reyes', 'Carlo', 'O.', 'carlo@gmail.com', '2001-09-11',  'M', 'www.facebook/car.com', 'carlo.png', '0'),
+         ('Andres', 'Nathan', 'M', 'nathan@gmail.com', '2002-11-12', 'M', 'www.facebook.com/nathan', 'nathan.png', '1'),
+         ('Arao', 'Patty', 'T', 'pat@gmail.com', '2003-07-15', 'F', 'www.facebook.com/patty', 'patty.png', '1');
 
 
 -- PROGRAM 
