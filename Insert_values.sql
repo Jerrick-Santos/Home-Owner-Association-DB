@@ -145,8 +145,8 @@ INSERT INTO individual (
     facebook,
     pic_filename, 
     undertaking
-) VALUES ('Santos', 'Jerrick', 'Q.', 'jerrick@gmail.com', 'M', 'www.facebook/jer.com', 'jerrick.png', '0')
-         ('Reyes', 'Carlo', 'O.', 'carlo@gmail.com', 'M', 'www.facebook/car.com', 'carlo.png', '0');
+) VALUES ('Santos', 'Jerrick', 'Q.', 'jerrick@gmail.com', '2003-01-22', 'M', 'www.facebook/jer.com', 'jerrick.png', '0'),
+         ('Reyes', 'Carlo', 'O.', 'carlo@gmail.com', '2001-09-11',  'M', 'www.facebook/car.com', 'carlo.png', '0');
 
 INSERT INTO individual (
     lastname,
@@ -156,5 +156,25 @@ INSERT INTO individual (
     gender,
     pic_filename, 
     undertaking
-) VALUES ('Arao', 'Patty', 'pat@gmail.com', 'F', 'patty.png', '1')
+) VALUES ('Arao', 'Patty', 'pat@gmail.com', 'F', 'patty.png', '1'),
          ('Andres', 'Nathan', 'nathan@gmail.com', 'M', 'neytan.png', '1');
+
+
+-- PROGRAM 
+INSERT INTO program 
+    hoa_name,
+    program_desc, 
+    program_purpose, 
+    target_participants, 
+    sponsor,
+    officer_id, 
+    max_participants,
+    program_start,
+    program_end,
+    reg_start, 
+    program_status,
+    budget
+) VALUES ('subdhoa1', 'Description of program 1', 'Purpose of program 1', '50', 'Sponsor 1', '1',
+          '50', '2023-05-10', '2023-05-15', '2023-04-09' 'OR', '10000.00'),
+          ('subdhoa1', 'Description of program 2', 'Purpose of program 2', '100', 'Sponsor 1', '2',
+          '50', '2023-05-10', '2023-05-15', '2023-04-09' 'OR', '10000.00')
