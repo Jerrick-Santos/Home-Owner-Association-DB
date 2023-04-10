@@ -50,7 +50,7 @@ CREATE TABLE `hoa` (
 
 
 CREATE TABLE `hoa_docs` (
-  `submission_type` INT             NOT NULL,
+  `submission_type` INT             NOT NULL    AUTO_INCREMENT,
   `doc_name`        VARCHAR(200)    NOT NULL,
   PRIMARY KEY (`submission_type`));
 
@@ -72,7 +72,7 @@ CREATE TABLE `hoa_submissions` (
 
 
 CREATE TABLE `individual` (
-  `individualid`    INT             NOT NULL,
+  `individualid`    INT             NOT NULL      AUTO_INCREMENT,
   `lastname`        VARCHAR(45)     NOT NULL,
   `firstname`       VARCHAR(45)     NOT NULL,
   `mi`              VARCHAR(2)      NULL,
@@ -149,7 +149,7 @@ CREATE TABLE `property` (
 
 
 CREATE TABLE `household` (
-  `householdid`     INT         NOT NULL,
+  `householdid`     INT         NOT NULL      AUTO_INCREMENT,
   `propertycode`    VARCHAR(6)  NOT NULL,
   PRIMARY KEY (`householdid`),
   INDEX `fk_household_property1_idx` (`propertycode` ASC) VISIBLE,
@@ -181,7 +181,7 @@ CREATE TABLE `resident` (
 
 
 CREATE TABLE `payment` (
-  `orno`        INT          NOT NULL,
+  `orno`        INT          NOT NULL       AUTO_INCREMENT,
   `amount`      FLOAT        NOT NULL,
   PRIMARY KEY (`orno`));
 
@@ -229,7 +229,7 @@ CREATE TABLE `hoa_officer` (
 
 
 CREATE TABLE `resident_id` (
-  `cardno`          INT                     NOT NULL,
+  `cardno`          INT                     NOT NULL        AUTO_INCREMENT,
   `request_date`    DATE                    NOT NULL,
   `request_reason`  VARCHAR(45)             NOT NULL,
   `issue_date`      DATE                    NOT NULL,
@@ -242,48 +242,45 @@ CREATE TABLE `resident_id` (
   INDEX `fk_resident_id_payment1_idx` (`orno` ASC) VISIBLE,
   INDEX `fk_resident_id_1_idx` (`hoa_officer` ASC) VISIBLE,
   CONSTRAINT `fk_resident_id_resident1`
-    FOREIGN KEY (`residentid`)
-    REFERENCES `resident` (`residentid`)
-    ,
+  FOREIGN KEY (`residentid`)
+  REFERENCES `resident` (`residentid`),
   CONSTRAINT `fk_resident_id_payment1`
-    FOREIGN KEY (`orno`)
-    REFERENCES `payment` (`orno`)
-    ,
+  FOREIGN KEY (`orno`)
+  REFERENCES `payment` (`orno`),
   CONSTRAINT `fk_resident_id_1`
-    FOREIGN KEY (`hoa_officer`)
-    REFERENCES `hoa_officer` (`homeownerid`)
+  FOREIGN KEY (`hoa_officer`)
+  REFERENCES `hoa_officer` (`homeownerid`)
     );
 
 
 CREATE TABLE `asset` (
-  `assetid` INT NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
-  `description` VARCHAR(45) NOT NULL,
-  `acq_date` DATE NOT NULL,
-  `forrent` TINYINT(1) NOT NULL,
-  `value` FLOAT NOT NULL,
-  `type` ENUM('P', 'E', 'FF', 'OA') NOT NULL,
-  `status` ENUM('W', 'D', 'FR', 'FD', 'DI') NOT NULL,
-  `location` VARCHAR(45) NOT NULL,
-  `location_mapx` VARCHAR(45) NOT NULL,
-  `location_mapy` VARCHAR(45) NOT NULL,
-  `location_assetid` INT NULL,
-  `hoaname` VARCHAR(100) NOT NULL,
+  `assetid`           INT                                 NOT NULL        AUTO_INCREMENT,
+  `name`              VARCHAR(45)                         NOT NULL,
+  `description`       VARCHAR(45)                         NOT NULL,
+  `acq_date`          DATE                                NOT NULL,
+  `forrent`           TINYINT(1)                          NOT NULL,
+  `value`             FLOAT                               NOT NULL,
+  `type`              ENUM('P', 'E', 'FF', 'OA')          NOT NULL,
+  `status`            ENUM('W', 'D', 'FR', 'FD', 'DI')    NOT NULL,
+  `location`          VARCHAR(45)                         NOT NULL,
+  `location_mapx`     VARCHAR(45)                         NOT NULL,
+  `location_mapy`     VARCHAR(45)                         NOT NULL,
+  `location_assetid`  INT                                     NULL,
+  `hoaname`           VARCHAR(100)                        NOT NULL,
   PRIMARY KEY (`assetid`),
   INDEX `fk_asset_hoa1_idx` (`hoaname` ASC) VISIBLE,
   INDEX `fk_asset_asset1_idx` (`location_assetid` ASC) VISIBLE,
   CONSTRAINT `fk_asset_hoa1`
-    FOREIGN KEY (`hoaname`)
-    REFERENCES `hoa` (`hoaname`)
-    ,
+  FOREIGN KEY (`hoaname`)
+  REFERENCES `hoa` (`hoaname`),
   CONSTRAINT `fk_asset_asset1`
-    FOREIGN KEY (`location_assetid`)
-    REFERENCES `asset` (`assetid`)
+  FOREIGN KEY (`location_assetid`)
+  REFERENCES `asset` (`assetid`)
     );
 
 
 CREATE TABLE `asset_transfer` (
-  `asset_transferid` INT NOT NULL,
+  `asset_transferid` INT NOT NULL AUTO_INCREMENT,
   `assetid` INT NOT NULL,
   `schedule` DATE NOT NULL,
   `hoa_officer` INT NOT NULL,
@@ -315,7 +312,7 @@ CREATE TABLE `asset_transfer` (
 
 
 CREATE TABLE `asset_activity` (
-  `asset_activityid` INT NOT NULL,
+  `asset_activityid` INT NOT NULL AUTO_INCREMENT,
   `assetid` INT NOT NULL,
   `description` VARCHAR(100) NOT NULL,
   `hoa_officer` INT NOT NULL,
@@ -364,7 +361,7 @@ CREATE TABLE `delete_transfer` (
 
 
 CREATE TABLE `asset_rental` (
-  `asset_rentalid` INT NOT NULL,
+  `asset_rentalid` INT NOT NULL AUTO_INCREMENT,
   `renter_residentid` INT NOT NULL,
   `reservation_date` DATE NOT NULL,
   `rental_date` DATE NOT NULL,
@@ -418,7 +415,7 @@ CREATE TABLE `delete_rental` (
 
 
 CREATE TABLE `asset_donation` (
-  `asset_donationid` INT NOT NULL,
+  `asset_donationid` INT NOT NULL AUTO_INCREMENT,
   `donor_lastname` VARCHAR(45) NOT NULL,
   `donor_firstname` VARCHAR(45) NOT NULL,
   `donor_mi` VARCHAR(45) NOT NULL,
@@ -464,7 +461,7 @@ CREATE TABLE `delete_donation` (
 
 
 CREATE TABLE `program` (
-  `program_id` INT NOT NULL,
+  `program_id` INT NOT NULL AUTO_INCREMENT,
   `hoa_name` VARCHAR(45) NOT NULL,
   `program_desc` VARCHAR(45) NOT NULL,
   `program_purpose` VARCHAR(45) NOT NULL,
@@ -491,7 +488,7 @@ CREATE TABLE `program` (
 
 
 CREATE TABLE `committee` (
-  `committee_id`    INT     NOT NULL,
+  `committee_id`    INT     NOT NULL      AUTO_INCREMENT,
   `program_id`      INT     NOT NULL,
   `hoa_officerid`   INT     NOT NULL,
   PRIMARY KEY (`committee_id`),
@@ -507,7 +504,7 @@ CREATE TABLE `committee` (
 
 
 CREATE TABLE `program_evidence` (
-  `evidence_id`     INT           NOT NULL,
+  `evidence_id`     INT           NOT NULL      AUTO_INCREMENT,
   `program_id`      INT           NOT NULL,
   `evidence_desc`   VARCHAR(200)  NOT NULL,
   `filename`        VARCHAR(45)   NOT NULL,
@@ -531,7 +528,7 @@ CREATE TABLE `program_evidence` (
 
 
 CREATE TABLE `registration` (
-  `reg_id`      INT         NOT NULL,
+  `reg_id`      INT         NOT NULL      AUTO_INCREMENT,
   `program_id`  INT         NOT NULL,
   `resident_id` INT         NOT NULL,
   `isPriority`  TINYINT(1)  NOT NULL,
@@ -560,7 +557,7 @@ CREATE TABLE `participant_approval` (
 
 
 CREATE TABLE `members` (
-  `member_id`       INT               NOT NULL,
+  `member_id`       INT               NOT NULL        AUTO_INCREMENT,
   `committee_id`    INT               NOT NULL,
   `resident_id`     INT               NOT NULL,
   `position`        ENUM('M', 'H')    NOT NULL,
@@ -589,7 +586,7 @@ CREATE TABLE `feedback` (
 
 
 CREATE TABLE `expenses` (
-  `expense_id`        INT             NOT NULL,
+  `expense_id`        INT             NOT NULL        AUTO_INCREMENT,
   `member_id`         INT             NOT NULL,
   `expense_desc`      VARCHAR(100)    NOT NULL,
   `exp_date`          DATE            NOT NULL,

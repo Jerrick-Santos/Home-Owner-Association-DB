@@ -161,7 +161,7 @@ INSERT INTO individual (
 
 
 -- PROGRAM 
-INSERT INTO program 
+INSERT INTO program (
     hoa_name,
     program_desc, 
     program_purpose, 
@@ -177,4 +177,4 @@ INSERT INTO program
 ) VALUES ('subdhoa1', 'Description of program 1', 'Purpose of program 1', '50', 'Sponsor 1', '1',
           '50', '2023-05-10', '2023-05-15', '2023-04-09' 'OR', '10000.00'),
           ('subdhoa1', 'Description of program 2', 'Purpose of program 2', '100', 'Sponsor 1', '2',
-          '50', '2023-05-10', '2023-05-15', '2023-04-09' 'OR', '10000.00')
+          '50', '2023-05-10', '2023-05-15', '2023-04-09' 'OR', '10000.00');
