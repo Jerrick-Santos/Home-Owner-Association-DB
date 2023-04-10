@@ -165,7 +165,6 @@ CREATE TABLE `resident` (
   `rel_homeowner`       VARCHAR(45)                 NOT NULL,
   `householdid`         INT                         NOT NULL,
   `authorized`          TINYINT(1)                  NOT NULL,
-  `status`              ENUM('A', 'L', 'C')         NOT NULL,
   `last_update`         DATETIME                    NOT NULL,
   PRIMARY KEY (`residentid`),
   INDEX `fk_resident_individual1_idx` (`residentid` ASC) VISIBLE,
@@ -280,19 +279,19 @@ CREATE TABLE `asset` (
 
 
 CREATE TABLE `asset_transfer` (
-  `asset_transferid` INT NOT NULL AUTO_INCREMENT,
-  `assetid` INT NOT NULL,
-  `schedule` DATE NOT NULL,
-  `hoa_officer` INT NOT NULL,
-  `actual_date` DATE NOT NULL,
-  `location_origin` VARCHAR(45) NOT NULL,
-  `location_dest` VARCHAR(45) NOT NULL,
-  `status` ENUM('S', 'O', 'C') NOT NULL,
-  `lastname` VARCHAR(45) NOT NULL,
-  `firstname` VARCHAR(45) NOT NULL,
-  `mi` VARCHAR(2) NOT NULL,
-  `mobilenum` INT(11) NOT NULL,
-  `orno` INT NULL,
+  `asset_transferid`        INT                     NOT NULL            AUTO_INCREMENT,
+  `assetid`                 INT                     NOT NULL,
+  `schedule`                DATE                    NOT NULL,
+  `hoa_officer`             INT                     NOT NULL,
+  `actual_date`             DATE                    NOT NULL,
+  `location_origin`         VARCHAR(45)             NOT NULL,
+  `location_dest`           VARCHAR(45)             NOT NULL,
+  `status`                  ENUM('S', 'O', 'C')     NOT NULL,
+  `lastname`                VARCHAR(45)             NOT NULL,
+  `firstname`               VARCHAR(45)             NOT NULL,
+  `mi`                      VARCHAR(2)              NOT NULL,
+  `mobilenum`               INT(11)                 NOT NULL,
+  `orno`                    INT                     NULL,
   PRIMARY KEY (`asset_transferid`),
   INDEX `assetid_idx` (`assetid` ASC) VISIBLE,
   INDEX `fk_asset_transfer_1_idx` (`hoa_officer` ASC) VISIBLE,
@@ -312,16 +311,16 @@ CREATE TABLE `asset_transfer` (
 
 
 CREATE TABLE `asset_activity` (
-  `asset_activityid` INT NOT NULL AUTO_INCREMENT,
-  `assetid` INT NOT NULL,
-  `description` VARCHAR(100) NOT NULL,
-  `hoa_officer` INT NOT NULL,
-  `tent_start` DATE NOT NULL,
-  `tent_end` DATE NOT NULL,
-  `actual_start` DATE NOT NULL,
-  `actual_end` DATE NOT NULL,
-  `orno` INT NULL,
-  `status` ENUM('S', 'O', 'C') NOT NULL,
+  `asset_activityid`    INT                     NOT NULL                AUTO_INCREMENT,
+  `assetid`             INT                     NOT NULL,
+  `description`         VARCHAR(100)            NOT NULL,
+  `hoa_officer`         INT                     NOT NULL,
+  `tent_start`          DATE                    NOT NULL,
+  `tent_end`            DATE                    NOT NULL,
+  `actual_start`        DATE                    NOT NULL,
+  `actual_end`          DATE                    NOT NULL,
+  `orno`                INT                     NULL,
+  `status`              ENUM('S', 'O', 'C')     NOT NULL,
   PRIMARY KEY (`asset_activityid`),
   INDEX `fk_asset_activity_asset1_idx` (`assetid` ASC) VISIBLE,
   INDEX `fk_asset_activity_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
@@ -341,8 +340,8 @@ CREATE TABLE `asset_activity` (
 
 
 CREATE TABLE `delete_activity` (
-  `asset_activityid` INT NOT NULL,
-  `pres_approval` TINYINT(1) NOT NULL,
+  `asset_activityid`    INT             NOT NULL,
+  `pres_approval`       TINYINT(1)      NOT NULL,
   PRIMARY KEY (`asset_activityid`),
   CONSTRAINT `fk_delete_activity_asset_activity1`
     FOREIGN KEY (`asset_activityid`)
@@ -351,8 +350,8 @@ CREATE TABLE `delete_activity` (
 
 
 CREATE TABLE `delete_transfer` (
-  `asset_transferid` INT NOT NULL,
-  `pres_approval` TINYINT(1) NOT NULL,
+  `asset_transferid`    INT             NOT NULL,
+  `pres_approval`       TINYINT(1)      NOT NULL,
   PRIMARY KEY (`asset_transferid`),
   CONSTRAINT `fk_delete_transfer_asset_transfer1`
     FOREIGN KEY (`asset_transferid`)
@@ -361,15 +360,15 @@ CREATE TABLE `delete_transfer` (
 
 
 CREATE TABLE `asset_rental` (
-  `asset_rentalid` INT NOT NULL AUTO_INCREMENT,
-  `renter_residentid` INT NOT NULL,
-  `reservation_date` DATE NOT NULL,
-  `rental_date` DATE NOT NULL,
-  `hoa_officer` INT NOT NULL,
-  `discount` DECIMAL(5,2) NOT NULL,
-  `status` ENUM('RV', 'C', 'OR', 'RT', 'D') NOT NULL,
-  `return_details` VARCHAR(200) NOT NULL,
-  `orno` INT NULL,
+  `asset_rentalid`      INT                                 NOT NULL        AUTO_INCREMENT,
+  `renter_residentid`   INT                                 NOT NULL,
+  `reservation_date`    DATE                                NOT NULL,
+  `rental_date`         DATE                                NOT NULL,
+  `hoa_officer`         INT                                 NOT NULL,
+  `discount`            DECIMAL(5,2)                        NOT NULL,
+  `status`              ENUM('RV', 'C', 'OR', 'RT', 'D')    NOT NULL,
+  `return_details`      VARCHAR(200)                        NOT NULL,
+  `orno`                INT                                 NULL,
   PRIMARY KEY (`asset_rentalid`),
   INDEX `fk_asset_rental_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
   INDEX `fk_asset_rental_resident1_idx` (`renter_residentid` ASC) VISIBLE,
@@ -389,9 +388,9 @@ CREATE TABLE `asset_rental` (
 
 
 CREATE TABLE `assets_rented` (
-  `assetid` INT NOT NULL,
-  `asset_rentalid` INT NOT NULL,
-  `cost` FLOAT NOT NULL,
+  `assetid`             INT         NOT NULL,
+  `asset_rentalid`      INT         NOT NULL,
+  `cost`                FLOAT       NOT NULL,
   PRIMARY KEY (`assetid`, `asset_rentalid`),
   INDEX `fk_assets_rented_asset_rental1_idx` (`asset_rentalid` ASC) VISIBLE,
   CONSTRAINT `fk_assets_rented_asset1`
@@ -405,8 +404,8 @@ CREATE TABLE `assets_rented` (
 
 
 CREATE TABLE `delete_rental` (
-  `asset_rentalid` INT NOT NULL,
-  `pres_approval` TINYINT(1) NULL,
+  `asset_rentalid`          INT                 NOT NULL,
+  `pres_approval`           TINYINT(1)          NULL,
   PRIMARY KEY (`asset_rentalid`),
   CONSTRAINT `fk_delete_rental_asset_rental1`
     FOREIGN KEY (`asset_rentalid`)
@@ -415,12 +414,12 @@ CREATE TABLE `delete_rental` (
 
 
 CREATE TABLE `asset_donation` (
-  `asset_donationid` INT NOT NULL AUTO_INCREMENT,
-  `donor_lastname` VARCHAR(45) NOT NULL,
-  `donor_firstname` VARCHAR(45) NOT NULL,
-  `donor_mi` VARCHAR(45) NOT NULL,
-  `donor_add` VARCHAR(45) NULL,
-  `hoa_officer` INT NOT NULL,
+  `asset_donationid`            INT                 NOT NULL        AUTO_INCREMENT,
+  `donor_lastname`              VARCHAR(45)         NOT NULL,
+  `donor_firstname`             VARCHAR(45)         NOT NULL,
+  `donor_mi`                    VARCHAR(45)         NOT NULL,
+  `donor_add`                   VARCHAR(45)         NULL,
+  `hoa_officer`                 INT                 NOT NULL,
   PRIMARY KEY (`asset_donationid`),
   INDEX `fk_asset_donation_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
   CONSTRAINT `fk_asset_donation_hoa_officer1`
@@ -430,9 +429,9 @@ CREATE TABLE `asset_donation` (
 
 
 CREATE TABLE `items_donated` (
-  `asset_donationid` INT NOT NULL,
-  `item_name` VARCHAR(45) NOT NULL,
-  `amount` FLOAT NOT NULL,
+  `asset_donationid`            INT                 NOT NULL,
+  `item_name`                   VARCHAR(45)         NOT NULL,
+  `amount`                      FLOAT               NOT NULL,
   PRIMARY KEY (`asset_donationid`, `item_name`),
   CONSTRAINT `fk_items_donated_asset_donation1`
     FOREIGN KEY (`asset_donationid`)
@@ -441,8 +440,8 @@ CREATE TABLE `items_donated` (
 
 
 CREATE TABLE `donation_event` (
-  `asset_donationid` INT NOT NULL,
-  `pic_filename` VARCHAR(45) NOT NULL,
+  `asset_donationid`            INT                 NOT NULL,
+  `pic_filename`                VARCHAR(45)         NOT NULL,
   PRIMARY KEY (`asset_donationid`, `pic_filename`),
   CONSTRAINT `fk_donation_event_asset_donation1`
     FOREIGN KEY (`asset_donationid`)
@@ -451,8 +450,8 @@ CREATE TABLE `donation_event` (
 
 
 CREATE TABLE `delete_donation` (
-  `asset_donationid` INT NOT NULL,
-  `pres_approval` TINYINT(1) NOT NULL,
+  `asset_donationid`        INT                 NOT NULL,
+  `pres_approval`           TINYINT(1)          NOT NULL,
   PRIMARY KEY (`asset_donationid`),
   CONSTRAINT `fk_delete_donation_asset_donation1`
     FOREIGN KEY (`asset_donationid`)
@@ -461,19 +460,19 @@ CREATE TABLE `delete_donation` (
 
 
 CREATE TABLE `program` (
-  `program_id` INT NOT NULL AUTO_INCREMENT,
-  `hoa_name` VARCHAR(45) NOT NULL,
-  `program_desc` VARCHAR(45) NOT NULL,
-  `program_purpose` VARCHAR(45) NOT NULL,
-  `target_participants` INT NOT NULL,
-  `sponsor` VARCHAR(45) NOT NULL,
-  `officer_id` INT NOT NULL,
-  `max_participants` INT NOT NULL,
-  `program_start` DATE NOT NULL,
-  `program_end` DATE NOT NULL,
-  `reg_start` DATE NOT NULL,
-  `program_status` ENUM('OR', 'CR', 'CA', 'CO') NOT NULL,
-  `budget` DECIMAL(6,2) NOT NULL,
+  `program_id`          INT                             NOT NULL            AUTO_INCREMENT,
+  `hoa_name`            VARCHAR(45)                     NOT NULL,
+  `program_desc`        VARCHAR(45)                     NOT NULL,
+  `program_purpose`     VARCHAR(45)                     NOT NULL,
+  `target_participants` INT                             NOT NULL,
+  `sponsor`             VARCHAR(45)                     NOT NULL,
+  `officer_id`          INT                             NOT NULL,
+  `max_participants`    INT                             NOT NULL,
+  `program_start`       DATE                            NOT NULL,
+  `program_end`         DATE                            NOT NULL,
+  `reg_start`           DATE                            NOT NULL,
+  `program_status`      ENUM('OR', 'CR', 'CA', 'CO')    NOT NULL,
+  `budget`              DECIMAL(6,2)                    NOT NULL,
   PRIMARY KEY (`program_id`),
   INDEX `fk_program_1_idx` (`hoa_name` ASC) VISIBLE,
   INDEX `fk_program_2_idx` (`officer_id` ASC) VISIBLE,
@@ -553,6 +552,9 @@ CREATE TABLE `participant_approval` (
   CONSTRAINT `fk_participant_approval_1`
   FOREIGN KEY (`reg_id`)
   REFERENCES `registration` (`reg_id`)
+  CONSTRAINT `fk_participant_approval_2`
+  FOREIGN KEY (`member_id`)
+  REFERENCES `mydb`.`members` (`member_id`)
     );
 
 
