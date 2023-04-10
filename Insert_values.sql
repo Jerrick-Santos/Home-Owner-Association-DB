@@ -152,6 +152,14 @@ INSERT INTO individual (
          ('Arao', 'Patty', 'T', 'pat@gmail.com', '2003-07-15', 'F', 'www.facebook.com/patty', 'patty.png', '1');
 
 
+INSERT INTO mobile (
+    mobilenum,
+    individualid
+) VALUES    ('916550596', '1'), -- 9 characters
+            ('956589700', '2'), -- 9 characters
+            ('956100990', '3'), -- 9 characters
+            ('916765537', '4'); -- 9 characters
+
 -- PROGRAM 
 INSERT INTO program 
     hoa_name,
