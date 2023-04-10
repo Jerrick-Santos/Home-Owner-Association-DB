@@ -1,5 +1,39 @@
--- ZIPCODES
+-- REGIONS
 
+INSERT INTO regions (
+    region
+)
+VALUE (
+    'REGION1'
+);
+
+INSERT INTO regions (
+    region
+)
+VALUE (
+    'REGION2'
+);
+
+-- PROVINCE 
+INSERT INTO provinces (
+    province,
+    region
+)
+VALUE (
+    'PROVINCE1',
+    'REGION1'
+);
+
+INSERT INTO provinces (
+    province,
+    region
+)
+VALUE (
+    'PROVINCE2',
+    'REGION2'
+);
+
+-- ZIPCODES
 INSERT INTO zipcodes (
     barangay, 
     city,
@@ -26,39 +60,6 @@ VALUES(
     '5678'
 );
 
--- PROVINCE 
-INSERT INTO provinces (
-    province,
-    region
-)
-VALUE (
-    'PROVINCE1',
-    'REGION1'
-);
-
-INSERT INTO provinces (
-    province,
-    region
-)
-VALUE (
-    'PROVINCE2',
-    'REGION2'
-);
--- REGIONS
-
-INSERT INTO regions (
-    region
-)
-VALUE (
-    'REGION1'
-);
-
-INSERT INTO regions (
-    region
-)
-VALUE (
-    'REGION2'
-);
 -- HOA 
 INSERT INTO hoa (
         hoaname,
@@ -142,23 +143,22 @@ INSERT INTO individual (
     email,
     birthday,
     gender,
-    facebook,
+    facebook_url,
     pic_filename, 
     undertaking
 ) VALUES ('Santos', 'Jerrick', 'Q.', 'jerrick@gmail.com', '2003-01-22', 'M', 'www.facebook/jer.com', 'jerrick.png', '0'),
-         ('Reyes', 'Carlo', 'O.', 'carlo@gmail.com', '2001-09-11',  'M', 'www.facebook/car.com', 'carlo.png', '0');
+         ('Reyes', 'Carlo', 'O.', 'carlo@gmail.com', '2001-09-11',  'M', 'www.facebook/car.com', 'carlo.png', '0'),
+         ('Andres', 'Nathan', 'M', 'nathan@gmail.com', '2002-11-12', 'M', 'www.facebook.com/nathan', 'nathan.png', '1'),
+         ('Arao', 'Patty', 'T', 'pat@gmail.com', '2003-07-15', 'F', 'www.facebook.com/patty', 'patty.png', '1');
 
-INSERT INTO individual (
-    lastname,
-    firstname,
-    email,
-    birthday,
-    gender,
-    pic_filename, 
-    undertaking
-) VALUES ('Arao', 'Patty', 'pat@gmail.com', 'F', 'patty.png', '1'),
-         ('Andres', 'Nathan', 'nathan@gmail.com', 'M', 'neytan.png', '1');
 
+INSERT INTO mobile (
+    mobilenum,
+    individualid
+) VALUES    ('916550596', '1'), -- 9 characters
+            ('956589700', '2'), -- 9 characters
+            ('956100990', '3'), -- 9 characters
+            ('916765537', '4'); -- 9 characters
 
 -- PROGRAM 
 INSERT INTO program (
