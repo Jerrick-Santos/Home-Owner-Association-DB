@@ -10,7 +10,7 @@ CREATE TABLE `provinces` (
   `province`     VARCHAR(45)     NOT NULL,
   `region`       VARCHAR(45)     NOT NULL,
   PRIMARY KEY (`province`),
-  INDEX `region_idx` (`region` ASC) VISIBLE,
+  INDEX `region_idx` (`region` ASC),
   CONSTRAINT `region`
     FOREIGN KEY (`region`)
     REFERENCES `regions` (`region`)
@@ -23,7 +23,7 @@ CREATE TABLE `zipcodes` (
   `province`     VARCHAR(45)    NOT NULL,
   `zipcode`      INT            NOT NULL,
   PRIMARY KEY (`zipcode`),
-  INDEX `province_idx` (`province` ASC) VISIBLE,
+  INDEX `province_idx` (`province` ASC),
   CONSTRAINT `province`
     FOREIGN KEY (`province`)
     REFERENCES `provinces` (`province`)
@@ -42,7 +42,7 @@ CREATE TABLE `hoa` (
   `subd_name`       VARCHAR(45)     NOT NULL,
   `monthly_dues`    INT(2)          NOT NULL,
   PRIMARY KEY (`hoaname`),
-  INDEX `zipcode_idx` (`office_zipcode` ASC) VISIBLE,
+  INDEX `zipcode_idx` (`office_zipcode` ASC),
   CONSTRAINT `zipcode`
     FOREIGN KEY (`office_zipcode`)
     REFERENCES `zipcodes` (`zipcode`)
@@ -60,7 +60,7 @@ CREATE TABLE `hoa_submissions` (
   `hoa_docs_submission_type`    INT             NOT NULL,
   `submission_date`             DATETIME        NOT NULL,
   PRIMARY KEY (`hoa_hoaname`, `hoa_docs_submission_type`, `submission_date`),
-  INDEX `fk_hoa_submissions_hoa_document1_idx` (`hoa_docs_submission_type` ASC) VISIBLE,
+  INDEX `fk_hoa_submissions_hoa_document1_idx` (`hoa_docs_submission_type` ASC),
   CONSTRAINT `fk_hoa_submissions_hoa`
     FOREIGN KEY (`hoa_hoaname`)
     REFERENCES `hoa` (`hoaname`)
@@ -107,7 +107,7 @@ CREATE TABLE `homeowner_addinfo` (
   `email2`          VARCHAR(45)         NULL,
   `mobile2`         INT(11) ZEROFILL    NULL,
   PRIMARY KEY (`homeownerid`),
-  INDEX `zipcode_idx` (`add2_zipcode` ASC) VISIBLE,
+  INDEX `zipcode_idx` (`add2_zipcode` ASC),
   CONSTRAINT `fk_homeowner_addinfo_hoaowner1`
     FOREIGN KEY (`homeownerid`)
     REFERENCES `homeowner` (`homeownerid`)
@@ -122,7 +122,7 @@ CREATE TABLE `mobile` (
   `mobilenum`       INT(11) ZEROFILL    NOT NULL,
   `individualid`    INT                 NOT NULL,
   PRIMARY KEY (`mobilenum`),
-  INDEX `fk_mobile_individual1_idx` (`individualid` ASC) VISIBLE,
+  INDEX `fk_mobile_individual1_idx` (`individualid` ASC),
   CONSTRAINT `fk_mobile_individual1`
     FOREIGN KEY (`individualid`)
     REFERENCES `individual` (`individualid`)
@@ -136,8 +136,8 @@ CREATE TABLE `property` (
   `size`             INT            NOT NULL,
   `turnover_date`    DATE           NOT NULL,
   PRIMARY KEY (`propertycode`),
-  INDEX `fk_property_homeowner1_idx` (`homeownerid` ASC) VISIBLE,
-  INDEX `fk_property_hoa1_idx` (`hoaname` ASC) VISIBLE,
+  INDEX `fk_property_homeowner1_idx` (`homeownerid` ASC),
+  INDEX `fk_property_hoa1_idx` (`hoaname` ASC),
   CONSTRAINT `fk_property_homeowner1`
     FOREIGN KEY (`homeownerid`)
     REFERENCES `homeowner` (`homeownerid`)
@@ -152,7 +152,7 @@ CREATE TABLE `household` (
   `householdid`     INT         NOT NULL      AUTO_INCREMENT,
   `propertycode`    VARCHAR(6)  NOT NULL,
   PRIMARY KEY (`householdid`),
-  INDEX `fk_household_property1_idx` (`propertycode` ASC) VISIBLE,
+  INDEX `fk_household_property1_idx` (`propertycode` ASC),
   CONSTRAINT `fk_household_property1`
     FOREIGN KEY (`propertycode`)
     REFERENCES `property` (`propertycode`)
@@ -167,8 +167,8 @@ CREATE TABLE `resident` (
   `authorized`          TINYINT(1)                  NOT NULL,
   `last_update`         DATETIME                    NOT NULL,
   PRIMARY KEY (`residentid`),
-  INDEX `fk_resident_individual1_idx` (`residentid` ASC) VISIBLE,
-  INDEX `fk_resident_household1_idx` (`householdid` ASC) VISIBLE,
+  INDEX `fk_resident_individual1_idx` (`residentid` ASC),
+  INDEX `fk_resident_household1_idx` (`householdid` ASC),
   CONSTRAINT `fk_resident_individual1`
     FOREIGN KEY (`residentid`)
     REFERENCES `individual` (`individualid`)
@@ -211,8 +211,8 @@ CREATE TABLE `hoa_officer` (
   `avail_Sat`      ENUM('M', 'A', 'NA')             NOT NULL,
   `avail_Sun`      ENUM('M', 'A', 'NA')             NOT NULL,
   PRIMARY KEY (`homeownerid`, `position`),
-  INDEX `hoaname_idx` (`hoaname` ASC) VISIBLE,
-  INDEX `elec_date_idx` (`elec_date` ASC) VISIBLE,
+  INDEX `hoaname_idx` (`hoaname` ASC),
+  INDEX `elec_date_idx` (`elec_date` ASC),
   CONSTRAINT `homeownerid`
     FOREIGN KEY (`homeownerid`)
     REFERENCES `homeowner` (`homeownerid`)
@@ -237,9 +237,9 @@ CREATE TABLE `resident_id` (
   `status`          ENUM('A', 'L', 'C')     NOT NULL,
   `orno`            INT                     NULL,
   PRIMARY KEY (`cardno`),
-  INDEX `fk_resident_id_resident1_idx` (`residentid` ASC) VISIBLE,
-  INDEX `fk_resident_id_payment1_idx` (`orno` ASC) VISIBLE,
-  INDEX `fk_resident_id_1_idx` (`hoa_officer` ASC) VISIBLE,
+  INDEX `fk_resident_id_resident1_idx` (`residentid` ASC),
+  INDEX `fk_resident_id_payment1_idx` (`orno` ASC),
+  INDEX `fk_resident_id_1_idx` (`hoa_officer` ASC),
   CONSTRAINT `fk_resident_id_resident1`
   FOREIGN KEY (`residentid`)
   REFERENCES `resident` (`residentid`),
@@ -267,8 +267,8 @@ CREATE TABLE `asset` (
   `location_assetid`  INT                                     NULL,
   `hoaname`           VARCHAR(100)                        NOT NULL,
   PRIMARY KEY (`assetid`),
-  INDEX `fk_asset_hoa1_idx` (`hoaname` ASC) VISIBLE,
-  INDEX `fk_asset_asset1_idx` (`location_assetid` ASC) VISIBLE,
+  INDEX `fk_asset_hoa1_idx` (`hoaname` ASC),
+  INDEX `fk_asset_asset1_idx` (`location_assetid` ASC),
   CONSTRAINT `fk_asset_hoa1`
   FOREIGN KEY (`hoaname`)
   REFERENCES `hoa` (`hoaname`),
@@ -293,9 +293,9 @@ CREATE TABLE `asset_transfer` (
   `mobilenum`               INT(11)                 NOT NULL,
   `orno`                    INT                     NULL,
   PRIMARY KEY (`asset_transferid`),
-  INDEX `assetid_idx` (`assetid` ASC) VISIBLE,
-  INDEX `fk_asset_transfer_1_idx` (`hoa_officer` ASC) VISIBLE,
-  INDEX `fk_asset_transfer_2_idx` (`orno` ASC) VISIBLE,
+  INDEX `assetid_idx` (`assetid` ASC),
+  INDEX `fk_asset_transfer_1_idx` (`hoa_officer` ASC),
+  INDEX `fk_asset_transfer_2_idx` (`orno` ASC),
   CONSTRAINT `assetid`
     FOREIGN KEY (`assetid`)
     REFERENCES `asset` (`assetid`)
@@ -322,9 +322,9 @@ CREATE TABLE `asset_activity` (
   `orno`                INT                     NULL,
   `status`              ENUM('S', 'O', 'C')     NOT NULL,
   PRIMARY KEY (`asset_activityid`),
-  INDEX `fk_asset_activity_asset1_idx` (`assetid` ASC) VISIBLE,
-  INDEX `fk_asset_activity_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
-  INDEX `fk_asset_activity_1_idx` (`orno` ASC) VISIBLE,
+  INDEX `fk_asset_activity_asset1_idx` (`assetid` ASC),
+  INDEX `fk_asset_activity_hoa_officer1_idx` (`hoa_officer` ASC),
+  INDEX `fk_asset_activity_1_idx` (`orno` ASC),
   CONSTRAINT `fk_asset_activity_asset1`
     FOREIGN KEY (`assetid`)
     REFERENCES `asset` (`assetid`)
@@ -370,9 +370,9 @@ CREATE TABLE `asset_rental` (
   `return_details`      VARCHAR(200)                        NOT NULL,
   `orno`                INT                                 NULL,
   PRIMARY KEY (`asset_rentalid`),
-  INDEX `fk_asset_rental_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
-  INDEX `fk_asset_rental_resident1_idx` (`renter_residentid` ASC) VISIBLE,
-  INDEX `fk_asset_rental_1_idx` (`orno` ASC) VISIBLE,
+  INDEX `fk_asset_rental_hoa_officer1_idx` (`hoa_officer` ASC),
+  INDEX `fk_asset_rental_resident1_idx` (`renter_residentid` ASC),
+  INDEX `fk_asset_rental_1_idx` (`orno` ASC),
   CONSTRAINT `fk_asset_rental_hoa_officer1`
     FOREIGN KEY (`hoa_officer`)
     REFERENCES `hoa_officer` (`homeownerid`)
@@ -392,7 +392,7 @@ CREATE TABLE `assets_rented` (
   `asset_rentalid`      INT         NOT NULL,
   `cost`                FLOAT       NOT NULL,
   PRIMARY KEY (`assetid`, `asset_rentalid`),
-  INDEX `fk_assets_rented_asset_rental1_idx` (`asset_rentalid` ASC) VISIBLE,
+  INDEX `fk_assets_rented_asset_rental1_idx` (`asset_rentalid` ASC),
   CONSTRAINT `fk_assets_rented_asset1`
     FOREIGN KEY (`assetid`)
     REFERENCES `asset` (`assetid`)
@@ -421,7 +421,7 @@ CREATE TABLE `asset_donation` (
   `donor_add`                   VARCHAR(45)         NULL,
   `hoa_officer`                 INT                 NOT NULL,
   PRIMARY KEY (`asset_donationid`),
-  INDEX `fk_asset_donation_hoa_officer1_idx` (`hoa_officer` ASC) VISIBLE,
+  INDEX `fk_asset_donation_hoa_officer1_idx` (`hoa_officer` ASC),
   CONSTRAINT `fk_asset_donation_hoa_officer1`
     FOREIGN KEY (`hoa_officer`)
     REFERENCES `hoa_officer` (`homeownerid`)
@@ -474,8 +474,8 @@ CREATE TABLE `program` (
   `program_status`      ENUM('OR', 'CR', 'CA', 'CO')    NOT NULL,
   `budget`              DECIMAL(6,2)                    NOT NULL,
   PRIMARY KEY (`program_id`),
-  INDEX `fk_program_1_idx` (`hoa_name` ASC) VISIBLE,
-  INDEX `fk_program_2_idx` (`officer_id` ASC) VISIBLE,
+  INDEX `fk_program_1_idx` (`hoa_name` ASC),
+  INDEX `fk_program_2_idx` (`officer_id` ASC),
   CONSTRAINT `fk_program_1`
     FOREIGN KEY (`hoa_name`)
     REFERENCES `hoa` (`hoaname`)
@@ -491,8 +491,8 @@ CREATE TABLE `committee` (
   `program_id`      INT     NOT NULL,
   `hoa_officerid`   INT     NOT NULL,
   PRIMARY KEY (`committee_id`),
-  INDEX `fk_committee_1_idx` (`program_id` ASC) VISIBLE,
-  INDEX `fk_committee_2_idx` (`hoa_officerid` ASC) VISIBLE,
+  INDEX `fk_committee_1_idx` (`program_id` ASC),
+  INDEX `fk_committee_2_idx` (`hoa_officerid` ASC),
   CONSTRAINT `fk_committee_1`
   FOREIGN KEY (`program_id`)
   REFERENCES `program` (`program_id`),
@@ -511,9 +511,9 @@ CREATE TABLE `program_evidence` (
   `officer_id`      INT           NOT NULL,
   `date_submitted`  DATE          NOT NULL,
   PRIMARY KEY (`evidence_id`),
-  INDEX `fk_program_evidence_1_idx` (`program_id` ASC) VISIBLE,
-  INDEX `fk_program_evidence_2_idx` (`resident_id` ASC) VISIBLE,
-  INDEX `fk_program_evidence_3_idx` (`officer_id` ASC) VISIBLE,
+  INDEX `fk_program_evidence_1_idx` (`program_id` ASC),
+  INDEX `fk_program_evidence_2_idx` (`resident_id` ASC),
+  INDEX `fk_program_evidence_3_idx` (`officer_id` ASC),
   CONSTRAINT `fk_program_evidence_1`
   FOREIGN KEY (`program_id`)
   REFERENCES `program` (`program_id`),
@@ -532,8 +532,8 @@ CREATE TABLE `registration` (
   `resident_id` INT         NOT NULL,
   `isPriority`  TINYINT(1)  NOT NULL,
   PRIMARY KEY (`reg_id`),
-  INDEX `fk_registration_1_idx` (`program_id` ASC) VISIBLE,
-  INDEX `fk_registration_2_idx` (`resident_id` ASC) VISIBLE,
+  INDEX `fk_registration_1_idx` (`program_id` ASC),
+  INDEX `fk_registration_2_idx` (`resident_id` ASC),
   CONSTRAINT `fk_registration_1`
   FOREIGN KEY (`program_id`)
   REFERENCES `program` (`program_id`),
@@ -564,8 +564,8 @@ CREATE TABLE `members` (
   `resident_id`     INT               NOT NULL,
   `position`        ENUM('M', 'H')    NOT NULL,
   PRIMARY KEY (`member_id`),
-  INDEX `fk_members_1_idx` (`committee_id` ASC) VISIBLE,
-  INDEX `fk_members_2_idx` (`resident_id` ASC) VISIBLE,
+  INDEX `fk_members_1_idx` (`committee_id` ASC),
+  INDEX `fk_members_2_idx` (`resident_id` ASC),
   CONSTRAINT `fk_members_1`
   FOREIGN KEY (`committee_id`)
   REFERENCES `committee` (`committee_id`),
@@ -595,7 +595,7 @@ CREATE TABLE `expenses` (
   `amount`            DECIMAL(5,2)    NOT NULL,
   `official_receipt`  BLOB            NOT NULL,
   PRIMARY KEY (`expense_id`),
-  INDEX `fk_expenses_1_idx` (`member_id` ASC) VISIBLE,
+  INDEX `fk_expenses_1_idx` (`member_id` ASC),
   CONSTRAINT `fk_expenses_1`
   FOREIGN KEY (`member_id`)
   REFERENCES `members` (`member_id`)
